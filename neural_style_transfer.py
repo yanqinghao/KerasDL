@@ -1,7 +1,3 @@
-import ssl
-
-ssl._create_default_https_context = ssl._create_unverified_context
-
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from keras.applications import vgg19
@@ -9,6 +5,16 @@ from keras import backend as K
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.misc import imsave
 import time
+import ssl
+import ptvsd
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+# Allow other computers to attach to ptvsd at this IP address and port.
+ptvsd.enable_attach(address=('10.122.24.46', 3000), redirect_output=True)
+
+# Pause the program until a remote debugger is attached
+ptvsd.wait_for_attach()
 
 target_image_path = './data/img/portrait.png'
 style_reference_image_path = './data/img/transfer_style_reference.png'
@@ -123,7 +129,7 @@ class Evaluator(object):
 
 evaluator = Evaluator()
 
-result_prefix = 'my_result'
+result_prefix = './result/my_result'
 iterations = 20
 x = preprocess_image(target_image_path)
 x = x.flatten()

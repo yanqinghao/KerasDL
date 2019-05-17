@@ -3,6 +3,16 @@ from keras import backend as K
 import numpy as np
 import scipy
 from keras.preprocessing import image
+import ptvsd
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+# Allow other computers to attach to ptvsd at this IP address and port.
+ptvsd.enable_attach(address=('10.122.24.46', 3000), redirect_output=True)
+
+# Pause the program until a remote debugger is attached
+ptvsd.wait_for_attach()
 
 
 def resize_img(img, size):
@@ -82,7 +92,7 @@ num_octave = 3
 octave_scale = 1.4
 iterations = 20
 max_loss = 10.
-base_image_path = '...'
+base_image_path = './data/img/deepdream.jpg'
 img = preprocess_image(base_image_path)
 original_shape = img.shape[1:3]
 successive_shapes = [original_shape]
@@ -102,5 +112,5 @@ for shape in successive_shapes:
     lost_detail = same_size_original - upscaled_shrunk_original_img
     img += lost_detail
     shrunk_original_img = resize_img(original_img, shape)
-    save_img(img, fname='dream_at_scale_' + str(shape) + '.png')
-save_img(img, fname='final_dream.png')
+    save_img(img, fname='./result/dream_at_scale_' + str(shape) + '.png')
+save_img(img, fname='./result/final_dream.png')
