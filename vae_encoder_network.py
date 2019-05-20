@@ -90,5 +90,6 @@ for i, yi in enumerate(grid_x):
         figure[i * digit_size:(i + 1) * digit_size, j * digit_size:(j + 1) *
                digit_size] = digit
 plt.figure(figsize=(10, 10))
-plt.imshow(figure, cmap='Greys_r')
-plt.show()
+# plt.imshow(figure, cmap='Greys_r')
+plt.imsave('./result/vae_encoder_network.png', figure, cmap='Greys_r')
+# plt.show()

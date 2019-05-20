@@ -3,6 +3,9 @@ from keras import layers
 import numpy as np
 import os
 from keras.preprocessing import image
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 latent_dim = 32
 height = 32
@@ -37,7 +40,7 @@ x = layers.Flatten()(x)
 x = layers.Dropout(0.4)(x)
 x = layers.Dense(1, activation='sigmoid')(x)
 discriminator = keras.models.Model(discriminator_input, x)
-discriminator.summary()
+print(discriminator.summary())
 discriminator_optimizer = keras.optimizers.RMSprop(
     lr=0.0008, clipvalue=1.0, decay=1e-8)
 discriminator.compile(
@@ -56,7 +59,7 @@ x_train = x_train.reshape((x_train.shape[0], ) +
                           (height, width, channels)).astype('float32') / 255.
 iterations = 10000
 batch_size = 20
-save_dir = 'your_dir'
+save_dir = './result'
 start = 0
 for step in range(iterations):
     random_latent_vectors = np.random.normal(size=(batch_size, latent_dim))
